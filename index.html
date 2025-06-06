@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thay thế đoạn token trong URL</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+    button { padding: 10px 15px; font-size: 16px; cursor: pointer; }
+    .result-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #f9f9f9;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+    .label { font-weight: bold; margin-top: 15px; display: block; }
+  </style>
+</head>
+<body>
+
+  <h2>🔄 Thay thế đoạn token trong URL</h2>
+
+  <label class="label">🔗 URL nguồn (Input 1):</label>
+  <input type="text" id="url1" placeholder="Dán URL gốc vào đây">
+
+  <label class="label">🔗 URL đích (Input 2):</label>
+  <input type="text" id="url2" placeholder="Dán URL đích vào đây">
+
+  <button onclick="replaceToken()">Thay thế</button>
+
+  <div id="result" class="result-box" style="display:none;"></div>
+  <button onclick="copyResult()">📋 Copy kết quả</button>
+
+  <script>
+    function extractToken(url) {
+      let match = url.match(/authuser=0&ear=([^&]+)/);
+      return match ? match[1] : '';
+    }
+
+    function replaceToken() {
+      let url1 = document.getElementById('url1').value;
+      let url2 = document.getElementById('url2').value;
+
+      let token = extractToken(url1);
+      let newUrl = url2.replace(/authuser=0&ear=([^&]+)/, 'authuser=0&ear=' + token);
+
+      document.getElementById('result').textContent = newUrl;
+      document.getElementById('result').style.display = 'block';
+    }
+
+    function copyResult() {
+      let result = document.getElementById('result').textContent;
+      navigator.clipboard.writeText(result).then(() => {
+        alert("✅ Đã copy kết quả!");
+      });
+    }
+  </script>
+
+</body>
+</html>
